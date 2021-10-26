@@ -80,6 +80,13 @@ func refreshTodoList() {
 	todoLI = []*dom.HTMLLIElement{}
 
 	for _, todo := range todos {
+		if filter == "active" && todo.Completed {
+			continue
+		}
+		if filter == "completed" && !todo.Completed {
+			continue
+		}
+
 		li := doc.CreateElement("li").(*dom.HTMLLIElement)
 
 		div := doc.CreateElement("div").(*dom.HTMLDivElement)
@@ -121,7 +128,7 @@ func refreshTodoList() {
 }
 
 func refreshFooter() {
-	count.SetInnerHTML(fmt.Sprintf("<strong>%d</strong> %s left", len(todos), unitWord()))
+	count.SetInnerHTML(fmt.Sprintf("<strong>%d</strong> %s left", left(), unitWord()))
 	footer.RemoveChild(footerUL)
 	footer.RemoveChild(clearBtn)
 
@@ -177,8 +184,18 @@ func refreshFooter() {
 	footer.AppendChild(clearBtn)
 }
 
+func left() int {
+	i := 0
+	for _, todo := range todos {
+		if !todo.Completed {
+			i++
+		}
+	}
+	return i
+}
+
 func unitWord() string {
-	if len(todos) == 1 {
+	if left() == 1 {
 		return "item"
 	}
 	return "items"

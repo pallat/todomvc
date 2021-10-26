@@ -51,5 +51,5 @@ func ClickFilterEvent(event dom.Event) {
 		filter = "completed"
 	}
 
-	refreshFooter()
+	refreshTodoList()
 }
