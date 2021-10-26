@@ -11,7 +11,7 @@ import (
 var (
 	running  uint
 	token    string
-	rfilter  string
+	filter   string = "all"
 	todos    []Todo
 	doc      dom.Document
 	body     *dom.HTMLBodyElement
@@ -132,7 +132,11 @@ func refreshFooter() {
 	aall := doc.CreateElement("a").(*dom.HTMLAnchorElement)
 	aall.SetHref("#/all")
 	aall.SetText("All")
-	aall.SetClass("selected")
+	aall.AddEventListener("click", false, ClickFilterEvent)
+
+	if filter == "all" {
+		aall.SetClass("selected")
+	}
 
 	liall.AppendChild(aall)
 
@@ -140,12 +144,24 @@ func refreshFooter() {
 	aact := doc.CreateElement("a").(*dom.HTMLAnchorElement)
 	aact.SetHref("#/active")
 	aact.SetText("Active")
+	aact.AddEventListener("click", false, ClickFilterEvent)
+
+	if filter == "active" {
+		aact.SetClass("selected")
+	}
+
 	liact.AppendChild(aact)
 
 	licomp := doc.CreateElement("li").(*dom.HTMLLIElement)
 	acomp := doc.CreateElement("a").(*dom.HTMLAnchorElement)
 	acomp.SetHref("#/completed")
 	acomp.SetText("Completed")
+	acomp.AddEventListener("click", false, ClickFilterEvent)
+
+	if filter == "completed" {
+		acomp.SetClass("selected")
+	}
+
 	licomp.AppendChild(acomp)
 
 	footerUL.AppendChild(liall)
