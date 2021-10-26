@@ -18,8 +18,10 @@ func RemoveTodoEvent(event dom.Event) {
 
 	for i := range todos {
 		if todos[i].ID == uint(id) {
+			// tg = doc.GetElementByID("toggle" + strconv.Itoa(i)).(*dom.BasicHTMLElement)
+			// tg.Toggle("")
 			// todos = append(todos[:i], todos[i+1:]...)
-			todos[i].Completed = true
+			todos[i].Completed = !todos[i].Completed
 			refreshTodoList()
 			return
 		}

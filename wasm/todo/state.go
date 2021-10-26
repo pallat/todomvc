@@ -87,6 +87,9 @@ func refreshTodoList() {
 		cb := doc.CreateElement("input").(*dom.HTMLInputElement)
 		cb.SetType("checkbox")
 		cb.SetClass("toggle")
+		cb.SetID("toggle" + strconv.Itoa(int(todo.ID)))
+		cb.SetDefaultChecked(todo.Completed)
+
 		lb := doc.CreateElement("label").(*dom.HTMLLabelElement)
 		lb.SetInnerHTML(todo.Text)
 		btn := doc.CreateElement("button").(*dom.HTMLButtonElement)
@@ -103,7 +106,11 @@ func refreshTodoList() {
 
 		li.AppendChild(div)
 		li.AppendChild(inp)
-		li.SetClass("todo-list")
+		if todo.Completed {
+			li.SetClass("completed")
+		} else {
+			li.SetClass("todo-list")
+		}
 		li.SetAttribute("data-id", strconv.Itoa(int(todo.ID)))
 
 		todolist.AppendChild(li)
