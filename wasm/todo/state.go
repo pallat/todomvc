@@ -180,6 +180,7 @@ func refreshFooter() {
 	clearBtn = doc.CreateElement("button").(*dom.HTMLButtonElement)
 	clearBtn.SetID("clear-completed")
 	clearBtn.SetInnerHTML("Clear completed")
+	clearBtn.AddEventListener("click", false, ClickClearCompletedEvent)
 
 	footer.AppendChild(clearBtn)
 }

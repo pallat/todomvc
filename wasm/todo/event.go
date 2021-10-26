@@ -9,7 +9,6 @@ import (
 
 func RemoveTodoEvent(event dom.Event) {
 	input := event.Target().(*dom.HTMLButtonElement)
-	println("remove at", input.Value())
 
 	id, err := strconv.Atoi(input.Value())
 	if err != nil {
@@ -19,7 +18,6 @@ func RemoveTodoEvent(event dom.Event) {
 
 	for i := range todos {
 		if todos[i].ID == uint(id) {
-			// todos = append(todos[:i], todos[i+1:]...)
 			todos[i].Completed = !todos[i].Completed
 			refreshTodoList()
 			return
@@ -51,5 +49,15 @@ func ClickFilterEvent(event dom.Event) {
 		filter = "completed"
 	}
 
+	refreshTodoList()
+}
+
+func ClickClearCompletedEvent(event dom.Event) {
+	bound := len(todos) - 1
+	for i := bound; i >= 0; i-- {
+		if todos[i].Completed {
+			todos = append(todos[:i], todos[i+1:]...)
+		}
+	}
 	refreshTodoList()
 }
