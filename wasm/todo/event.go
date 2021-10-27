@@ -64,8 +64,15 @@ func ClickClearSelectedEvent(event dom.Event) {
 		return
 	}
 
+	if len(todos) == 1 {
+		todos = []Todo{}
+		refreshTodoList()
+		return
+	}
+
 	for i := range todos {
 		if todos[i].ID == uint(id) {
+			todos[i].Completed = !todos[i].Completed
 			todos = append(todos[:i], todos[i+1:]...)
 			refreshTodoList()
 			return

@@ -34,9 +34,9 @@ func Start() {
 
 	newtodo = doc.GetElementByID("new-todo").(*dom.HTMLInputElement)
 	todolist = doc.GetElementByID("todo-list").(*dom.HTMLUListElement)
-	count = doc.GetElementByID("todo-count").(*dom.HTMLSpanElement)
 
 	footer = doc.GetElementByID("footer").(*dom.BasicHTMLElement)
+	count = doc.GetElementByID("todo-count").(*dom.HTMLSpanElement)
 	footerUL = doc.CreateElement("ul").(*dom.HTMLUListElement)
 	clearBtn = doc.CreateElement("button").(*dom.HTMLButtonElement)
 
@@ -125,14 +125,14 @@ func refreshTodoList() {
 		todolist.AppendChild(li)
 		todoLI = append(todoLI, li)
 
-		refreshFooter()
 	}
+
+	refreshFooter()
 }
 
 func refreshFooter() {
 	count.SetInnerHTML(fmt.Sprintf("<strong>%d</strong> %s left", left(), unitWord()))
 	footer.RemoveChild(footerUL)
-	footer.RemoveChild(clearBtn)
 
 	footerUL = doc.CreateElement("ul").(*dom.HTMLUListElement)
 	footerUL.SetID("filters")
@@ -179,18 +179,39 @@ func refreshFooter() {
 
 	footer.AppendChild(footerUL)
 
-	clearBtn = doc.CreateElement("button").(*dom.HTMLButtonElement)
-	clearBtn.SetID("clear-completed")
-	clearBtn.SetInnerHTML("Clear completed")
-	clearBtn.AddEventListener("click", false, ClickClearCompletedEvent)
+	footer.RemoveChild(clearBtn)
 
+	clearBtn = doc.CreateElement("button").(*dom.HTMLButtonElement)
+	if completed() > 0 {
+		clearBtn.SetID("clear-completed")
+		clearBtn.SetInnerHTML("Clear completed")
+		clearBtn.AddEventListener("click", false, ClickClearCompletedEvent)
+	}
 	footer.AppendChild(clearBtn)
+
 }
 
 func left() int {
+	println(len(todos))
 	i := 0
+	if len(todos) == 0 {
+		return 0
+	}
 	for _, todo := range todos {
 		if !todo.Completed {
+			i++
+		}
+	}
+	return i
+}
+func completed() int {
+	i := 0
+	if len(todos) == 0 {
+		return 0
+	}
+
+	for _, todo := range todos {
+		if todo.Completed {
 			i++
 		}
 	}
