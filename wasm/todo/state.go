@@ -99,9 +99,11 @@ func refreshTodoList() {
 		cb.SetDefaultChecked(todo.Completed)
 		cb.SetAttribute("data-id", strconv.Itoa(int(todo.ID)))
 		cb.AddEventListener("click", false, RemoveTodoEvent)
+		cb.SetInnerHTML("\n")
 
 		lb := doc.CreateElement("label").(*dom.HTMLLabelElement)
 		lb.SetInnerHTML(todo.Text)
+
 		btn := doc.CreateElement("button").(*dom.HTMLButtonElement)
 		btn.SetClass("destroy")
 		btn.SetAttribute("data-id", strconv.Itoa(int(todo.ID)))
@@ -119,7 +121,7 @@ func refreshTodoList() {
 		if todo.Completed {
 			li.SetClass("completed")
 		} else {
-			li.SetClass("todo-list")
+			li.SetClass("")
 		}
 
 		todolist.AppendChild(li)
@@ -192,7 +194,6 @@ func refreshFooter() {
 }
 
 func left() int {
-	println(len(todos))
 	i := 0
 	if len(todos) == 0 {
 		return 0
