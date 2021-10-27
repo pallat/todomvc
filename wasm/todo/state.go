@@ -88,21 +88,24 @@ func refreshTodoList() {
 		}
 
 		li := doc.CreateElement("li").(*dom.HTMLLIElement)
+		li.SetAttribute("data-id", strconv.Itoa(int(todo.ID)))
 
 		div := doc.CreateElement("div").(*dom.HTMLDivElement)
 		div.SetClass("view")
 		cb := doc.CreateElement("input").(*dom.HTMLInputElement)
 		cb.SetType("checkbox")
 		cb.SetClass("toggle")
-		cb.SetID("toggle" + strconv.Itoa(int(todo.ID)))
+		// cb.SetID("toggle" + strconv.Itoa(int(todo.ID)))
 		cb.SetDefaultChecked(todo.Completed)
+		cb.SetAttribute("data-id", strconv.Itoa(int(todo.ID)))
+		cb.AddEventListener("click", false, RemoveTodoEvent)
 
 		lb := doc.CreateElement("label").(*dom.HTMLLabelElement)
 		lb.SetInnerHTML(todo.Text)
 		btn := doc.CreateElement("button").(*dom.HTMLButtonElement)
 		btn.SetClass("destroy")
-		btn.SetValue(strconv.Itoa(int(todo.ID)))
-		btn.AddEventListener("click", false, RemoveTodoEvent)
+		btn.SetAttribute("data-id", strconv.Itoa(int(todo.ID)))
+		btn.AddEventListener("click", false, ClickClearSelectedEvent)
 
 		div.AppendChild(cb)
 		div.AppendChild(lb)
@@ -118,7 +121,6 @@ func refreshTodoList() {
 		} else {
 			li.SetClass("todo-list")
 		}
-		li.SetAttribute("data-id", strconv.Itoa(int(todo.ID)))
 
 		todolist.AppendChild(li)
 		todoLI = append(todoLI, li)

@@ -8,9 +8,12 @@ import (
 )
 
 func RemoveTodoEvent(event dom.Event) {
-	input := event.Target().(*dom.HTMLButtonElement)
+	if event.Target().NodeName() != "INPUT" {
+		return
+	}
+	input := event.Target().(*dom.HTMLInputElement)
 
-	id, err := strconv.Atoi(input.Value())
+	id, err := strconv.Atoi(input.GetAttribute("data-id"))
 	if err != nil {
 		println("error", err.Error())
 		return
@@ -50,6 +53,25 @@ func ClickFilterEvent(event dom.Event) {
 	}
 
 	refreshTodoList()
+}
+
+func ClickClearSelectedEvent(event dom.Event) {
+	input := event.Target().(*dom.HTMLButtonElement)
+
+	id, err := strconv.Atoi(input.GetAttribute("data-id"))
+	if err != nil {
+		println("error", err.Error())
+		return
+	}
+
+	for i := range todos {
+		if todos[i].ID == uint(id) {
+			todos = append(todos[:i], todos[i+1:]...)
+			refreshTodoList()
+			return
+		}
+	}
+
 }
 
 func ClickClearCompletedEvent(event dom.Event) {
