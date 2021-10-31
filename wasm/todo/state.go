@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/augustoroman/promise"
 	dom "honnef.co/go/js/dom/v2"
 )
 
@@ -46,23 +45,6 @@ func Start() {
 	newtodo.AddEventListener("keyup", false, AddTodoEvent)
 
 	refreshTodoList()
-}
-
-func FetchTodoList() {
-	var p = &promise.Promise{}
-
-	p.Then(
-		func(value interface{}) interface{} {
-			todos = value.([]Todo)
-			refreshTodoList()
-			return p
-		}, func(value interface{}) interface{} {
-			println("error", value)
-			return p
-		},
-	)
-
-	PromiseTodoList(token, p)
 }
 
 func AddTodo(val string) {
